@@ -15,7 +15,7 @@ hisCode = ''
 
 # 获取cookie
 def getCookie():
-    cookies = 'JSESSIONID=JSESSIONID=AEF4C9C3AF6200D83CC60D482AC3074E'
+    cookies = 'JSESSIONID=A30335F55487BF148F87AF6C065B8CB8'
     jar = dict()
     for cookie in cookies.split(';'):
         key, value = cookie.split('=', 1)
@@ -163,11 +163,11 @@ def captcha(hisCode):
 
 
 getCookie()
-huaxiCardList('3410196_token_xxx_token_17898151636', '3410196')
+#huaxiCardList('3410196_token_xxx_token_17898151636', '3410196')
 print("")
-departmentList()
-# doctorList('4000-GK')
-# doctorsDetail('6989','553')
+#departmentList()
+#doctorList('4201-XWK')
+doctorsDetail('17442','294')
 # appointment()
 # captcha('HID0101')
 exit()
