@@ -54,17 +54,17 @@ def goodsList():
             n = n + 1
         print("请选择兑换的商品：", end='')
         k = int(input())
-    return rr[k - 1]['recordid'], rr[k - 1]['goodsId'], rr[k - 1]['eid']
+    return rr[k - 1]['recordid'], rr[k - 1]['goodsId'], rr[k - 1]['eid'], rr[k - 1]['goodsName']
 
 
 # 下单
-def ocrCaptcha(recordid, goodsId, eid, storeId, memberid1, token1):
+def ocrCaptcha(recordid, goodsId, eid, storeId, memberid1, token1, change_count):
     # recordid=244&goodsId=493&eid=574&pikeId=&memberid=9520038000335&memberId=9520038000335&mobile=13408081070&token=0445CAF7C70D7875ACBD769731CF2DC5&language=zh&store=003&changeCount=1&storeId=003
     data = {
         "recordid": recordid,
         "goodsId": goodsId,
         "eid": eid,
-        "changeCount": "1",
+        "changeCount": change_count,
         "storeId": storeId,
         "memberid": memberid1,
         "token": token1
@@ -89,19 +89,26 @@ user_info = [
 ]
 
 # 获取选择商品信息
-recordid, goodsId, eid = goodsList()
+recordid, goodsId, eid, goods_name = goodsList()
+print("获取商品成功：", goods_name)
+
+# 获取商品购买数量
+print("请输入购买数量：", end='')
+change_count = int(input())
+
 num = 1
 # 默认从第一个用户开始
 user_num = 0
 for i in range(1, 10000):
 
-    result = ocrCaptcha(recordid, goodsId, eid, store_id, user_info[user_num]['memberid'], user_info[user_num]['token'])
+    result = ocrCaptcha(recordid, goodsId, eid, store_id, user_info[user_num]['memberid'], user_info[user_num]['token'],
+                        change_count)
     if result['flag']:
         if not result['result']:
             print('第' + str(num) + '次抢购失败，', result['message'])
             num = num + 1
         else:
-            print(user_info[user_num]['name'] + '用户抢购成功，请前往兑换中心查看!!!')
+            print(user_info[user_num]['name'] + '用户抢购商品(' + goods_name + '*' + str(change_count) + ')成功，请前往兑换中心查看!!!')
             if user_num + 1 == len(user_info):
                 print('所有用户抢购完成，请前往兑换中心查看!!!')
                 break
