@@ -1,19 +1,26 @@
 import requests
+import urllib3
+urllib3.disable_warnings()
 
+# 定义请求头文件
+all_headers = {
+        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Html5Plus/1.0 (Immersed/44)"
+}
 
 # 登录接口
 def login():
     # phoneNumber=13312345678&password=cF3myMHlGxMQ9pvXsWPBGw%3D%3D&memberid=&memberId=&mobile=&token=&language=zh&store=003
     print("请输入登录的手机号码(密码默认为123123)：", end='')
     phone_number = input()
+ 
     data = {
         "phoneNumber": phone_number,
         "password": "cnssWAVm2vAIoeXDiVDHjw=="
     }
     print("请稍等，正在登录中.....")
-    r = requests.post("https://crm.iy-cd.com/wns-ciycrmapp/appLoginController/passwordLogin", data=data)
+    r = requests.post("https://crm.iy-cd.com/wns-ciycrmapp/appLoginController/passwordLogin", data=data, headers=all_headers, verify=False)
     result = r.json()
-    # print(r.json())
+    #print(r.json())
     if result['flag']:
         if len(result['result']) == 3:
             print("恭喜你，账号" + result['result']['phoneNumber'] + "登录成功")
@@ -27,7 +34,7 @@ def login():
 
 def getStore():
     # 请求值 memberid=9520038000335&memberId=9520038000335&mobile=13408081070&token=0445CAF7C70D7875ACBD769731CF2DC5&language=zh&store=003
-    r = requests.post("https://crm.iy-cd.com/wns-ciycrmapp/appLoginController/getStorem")
+    r = requests.post("https://crm.iy-cd.com/wns-ciycrmapp/appLoginController/getStorem", headers=all_headers, verify=False)
     # 返回值 {"flag":true,"message":"操作成功!","result":{"storem":[{"text":"春熙店","value":"001"},{"text":"双楠店","value":"002"},{"text":"锦华店","value":"003"},{"text":"建设路店","value":"004"},{"text":"高新店","value":"005"},{"text":"温江店","value":"006"},{"text":"眉山店","value":"007"},{"text":"绿地店","value":"008"},{"text":"华府大道店","value":"101"}]},"count":0}
     if r.json()['flag']:
         n = 1
@@ -43,7 +50,7 @@ def getStore():
 
 def goodsList():
     r = requests.get(
-        "https://crm.iy-cd.com/wns-ciycrmapp/appHomeController/getPointsChangeList?giftKbn=-1&orderBy=3&storeCode=003&token=0445CAF7C70D7875ACBD769731CF2DC5")
+        "https://crm.iy-cd.com/wns-ciycrmapp/appHomeController/getPointsChangeList?giftKbn=-1&orderBy=3&storeCode=003&token=0445CAF7C70D7875ACBD769731CF2DC5", headers=all_headers, verify=False)
 
     if r.json()['flag']:
         n = 1
@@ -69,7 +76,7 @@ def ocrCaptcha(recordid, goodsId, eid, storeId, memberid1, token1, change_count)
         "memberid": memberid1,
         "token": token1
     }
-    r = requests.post("https://crm.iy-cd.com/wns-ciycrmapp/appHomeController/doPointsChange", data=data)
+    r = requests.post("https://crm.iy-cd.com/wns-ciycrmapp/appHomeController/doPointsChange", headers=all_headers, data=data, verify=False)
     # print(r.json())
     return r.json()
 
